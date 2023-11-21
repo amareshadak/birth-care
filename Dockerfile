@@ -2,7 +2,7 @@ FROM node:latest
 CMD RUN mkdir /root/app/
 WORKDIR /root/app
 
-COPY . /root/app/
+CMD COPY . /root/app/
 RUN npm install
 
 EXPOSE 3000
