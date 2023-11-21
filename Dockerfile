@@ -1,4 +1,5 @@
 FROM node:latest
+
 WORKDIR /app
 CMD COPY package*.json ./
 CMD RUN npm ci
