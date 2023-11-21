@@ -1,10 +1,9 @@
 FROM node:latest
-CMD RUN mkdir /root/app/
-WORKDIR /root/app
-
-CMD COPY . /root/app/
-CMD RUN npm install
-
-EXPOSE 3000
-
-CMD npm run start
+WORKDIR /app
+CMD COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+RUN npm install -g serve
+EXPOSE 5000
+CMD ["serve", "-s", "build", "-l", "5000"]
