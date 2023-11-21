@@ -1,4 +1,4 @@
-FROM node:latest
+ FROM node:latest
 WORKDIR /
 CMD COPY package*.json ./
 CMD RUN npm install
