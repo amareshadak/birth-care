@@ -1,13 +1,8 @@
-# Stage 1: Build the Next.js application
-FROM node:latest AS builder
+FROM node:latest
 WORKDIR /app
 CMD COPY package*.json ./
-CMD RUN npm ci
+CMD RUN npm install
 CMD COPY . .
 CMD RUN npm run build
-
-# Stage 2: Set up the Nginx server
-FROM nginx:stable-alpine
-CMD COPY --from=builder /app/.next /usr/share/nginx/html
-CMD COPY --from=builder /app/public /usr/share/nginx/html/_next/static
-CMD COPY nginx.conf /etc/nginx/conf.d/default.conf
+CMD EXPOSE 3000
+CMD ["npm", "run", "start"]
