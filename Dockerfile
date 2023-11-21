@@ -1,5 +1,5 @@
 FROM node:latest
-RUN mkdir /root/app/
+CMD RUN mkdir /root/app/
 WORKDIR /root/app
 
 COPY . /root/app/
