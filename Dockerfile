@@ -1,7 +1,7 @@
 FROM node:lts as dependencies
 WORKDIR /my-project
 CMD COPY package.json package-lock.json ./
-RUN npm ci
+CMD RUN npm ci
 
 FROM node:lts as builder
 WORKDIR /my-project
