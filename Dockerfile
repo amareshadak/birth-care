@@ -1,33 +1,23 @@
-FROM node:latest AS development
-WORKDIR /app
-ENV HOST=0.0.0.0
-ENV PORT=3000
-ENV NODE_ENV=development
-EXPOSE 3000
-CMD [ "yarn", "dev" ]
-
-FROM node:latest AS dependencies
-ENV NODE_ENV=production
-WORKDIR /app
+FROM node:lts as dependencies
+WORKDIR /my-project
 COPY package.json yarn.lock ./
-CMD RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile
 
-FROM node:latest AS builder
-ENV NODE_ENV=development
-WORKDIR /app
+FROM node:lts as builder
+WORKDIR /my-project
 COPY . .
-RUN yarn install --frozen-lockfile && NODE_ENV=production yarn build
+COPY --from=dependencies /my-project/node_modules ./node_modules
+RUN yarn build
 
-FROM node:latest AS production
-WORKDIR /app
-ENV HOST=0.0.0.0
-ENV PORT=3000
-ENV NODE_ENV=production
-COPY --chown=node --from=builder /app/next.config.js ./
-COPY --chown=node --from=builder /app/public ./public
-COPY --chown=node --from=builder /app/.next ./.next
-COPY --chown=node --from=builder /app/yarn.lock /app/package.json ./
-COPY --chown=node --from=dependencies /app/node_modules ./node_modules
-USER node
+FROM node:lts as runner
+WORKDIR /my-project
+ENV NODE_ENV production
+# If you are using a custom next.config.js file, uncomment this line.
+# COPY --from=builder /my-project/next.config.js ./
+COPY --from=builder /my-project/public ./public
+COPY --from=builder /my-project/.next ./.next
+COPY --from=builder /my-project/node_modules ./node_modules
+COPY --from=builder /my-project/package.json ./package.json
+
 EXPOSE 3000
-CMD [ "yarn", "start" ]
+CMD ["yarn", "start"]
