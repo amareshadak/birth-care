@@ -1,4 +1,4 @@
-FROM node:17.1.0-alpine3.12 AS development
+FROM node:latest AS development
 WORKDIR /app
 ENV HOST=0.0.0.0
 ENV PORT=3000
