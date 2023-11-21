@@ -9,4 +9,4 @@ CMD RUN npm install -g serve
 CMD RUN npm run build
 
 
-CMD ["serve", "-s", "build", "-l", "8080"]
+CMD ["serve", "-s", "build", "-l"]
