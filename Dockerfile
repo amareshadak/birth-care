@@ -1,5 +1,5 @@
 FROM node:latest
-WORKDIR /app
+WORKDIR /
 CMD COPY package*.json ./
 CMD RUN npm install
 CMD COPY . .
