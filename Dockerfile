@@ -1,13 +1,13 @@
 FROM node:lts as dependencies
 WORKDIR /my-project
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+CMD RUN yarn install --frozen-lockfile
 
 FROM node:lts as builder
 WORKDIR /my-project
 COPY . .
 COPY --from=dependencies /my-project/node_modules ./node_modules
-RUN yarn build
+CMD RUN yarn build
 
 FROM node:lts as runner
 WORKDIR /my-project
