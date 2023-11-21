@@ -4,8 +4,13 @@ WORKDIR /root/app
 
 CMD COPY . /root/app/
 CMD RUN npm install
-CMD RUN -it -p 8080:8080 Birthcare
 
-EXPOSE 8080/tcp
+EXPOSE 3000
+
+ENV PORT 3000
+
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]
 
 CMD npm run start
