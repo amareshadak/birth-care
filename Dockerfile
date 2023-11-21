@@ -10,7 +10,7 @@ FROM node:17.1.0-alpine3.12 AS dependencies
 ENV NODE_ENV=production
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+CMD RUN yarn install --frozen-lockfile
 
 FROM node:17.1.0-alpine3.12 AS builder
 ENV NODE_ENV=development
