@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Theme>
-          <Grid columns="3" gap="3" mb={"3"}>
+          <Grid columns="3" gap="3" mb={"2"}>
             <Flex direction="column" gap="3">
               <Box grow="1" className="bg-slate-400 text-center w-screen p-1">
                 Navbar
