@@ -5,6 +5,6 @@ WORKDIR /root/app
 CMD COPY . /root/app/
 CMD RUN npm install
 
-EXPOSE 8080
+EXPOSE 8080/tcp
 
 CMD npm run start
