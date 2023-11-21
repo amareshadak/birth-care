@@ -1,7 +1,7 @@
 FROM node:latest
 WORKDIR /app
 CMD COPY package*.json ./
-RUN npm ci
+CMD RUN npm ci
 COPY . .
 RUN npm run build
 RUN npm install -g serve
