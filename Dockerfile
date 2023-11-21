@@ -1,21 +1,33 @@
-FROM node:latest
+FROM node:17.1.0-alpine3.12 AS development
+WORKDIR /app
+ENV HOST=0.0.0.0
+ENV PORT=3000
+ENV NODE_ENV=development
+EXPOSE 3000
+CMD [ "yarn", "dev" ]
 
-CMD RUN mkdir -p /usr/src/app
-ENV PORT 3000
+FROM node:17.1.0-alpine3.12 AS dependencies
+ENV NODE_ENV=production
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-WORKDIR /usr/src/app
+FROM node:17.1.0-alpine3.12 AS builder
+ENV NODE_ENV=development
+WORKDIR /app
+COPY . .
+RUN yarn install --frozen-lockfile && NODE_ENV=production yarn build
 
-COPY package.json /usr/src/app
-COPY yarn.lock /usr/src/app
-
-# Production use node instead of root
-# USER node
-
-CMD RUN yarn install --production
-
-COPY . /usr/src/app
-
-CMD RUN yarn build
-
+FROM node:17.1.0-alpine3.12 AS production
+WORKDIR /app
+ENV HOST=0.0.0.0
+ENV PORT=3000
+ENV NODE_ENV=production
+COPY --chown=node --from=builder /app/next.config.js ./
+COPY --chown=node --from=builder /app/public ./public
+COPY --chown=node --from=builder /app/.next ./.next
+COPY --chown=node --from=builder /app/yarn.lock /app/package.json ./
+COPY --chown=node --from=dependencies /app/node_modules ./node_modules
+USER node
 EXPOSE 3000
 CMD [ "yarn", "start" ]
